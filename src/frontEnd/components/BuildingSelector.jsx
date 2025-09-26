@@ -69,7 +69,7 @@ const BuildingSelector = () => {
               id="IDInputBuildingSelector"
             />
             {error && <p className="text-red-500">{error}</p>}
-            <Button type="submit">BUSCAR</Button>
+            <Button type="submit" text="BUSCAR"></Button>
           </Form>
         </Section>
       </MainCard>

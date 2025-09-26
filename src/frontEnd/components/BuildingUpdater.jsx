@@ -4,27 +4,11 @@ import ContenedorGeneral from "./ContenedorGeneral";
 import MainCard from "./MainCard";
 import Section from "./Section";
 import SelectorManual from "./SelectorManual";
+import SelectorAutomatico from "./SelectorAutomatico";
 import Title from "./Title";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-const items = [
-  { numero: "1", atendio: "Si/No", ultVisita: "2023-10-01" },
-  { numero: "2", atendio: "Si/No", ultVisita: "2023-10-02" },
-  { numero: "3", atendio: "Si/No", ultVisita: "2023-10-03" },
-  { numero: "4", atendio: "Si/No", ultVisita: "2023-10-04" },
-  { numero: "5", atendio: "Si/No", ultVisita: "2023-10-05" },
-  { numero: "1", atendio: "Si/No", ultVisita: "2023-10-01" },
-  { numero: "2", atendio: "Si/No", ultVisita: "2023-10-02" },
-  { numero: "3", atendio: "Si/No", ultVisita: "2023-10-03" },
-  { numero: "4", atendio: "Si/No", ultVisita: "2023-10-04" },
-  { numero: "5", atendio: "Si/No", ultVisita: "2023-10-05" },
-  { numero: "1", atendio: "Si/No", ultVisita: "2023-10-01" },
-  { numero: "2", atendio: "Si/No", ultVisita: "2023-10-02" },
-  { numero: "3", atendio: "Si/No", ultVisita: "2023-10-03" },
-  { numero: "4", atendio: "Si/No", ultVisita: "2023-10-04" },
-  { numero: "5", atendio: "Si/No", ultVisita: "2023-10-05" },
-];
+import { jwtDecode } from "jwt-decode";
 
 const BuildingUpdater = () => {
   const location = useLocation();
@@ -32,7 +16,10 @@ const BuildingUpdater = () => {
   const buildingId = location.state?.buildingId;
   const [doorbells, setDoorbells] = useState([]);
 
+  const datoFake = { number: "1A", isAnswered: true, registeredAt: "31/05/03" };
+
   useEffect(() => {
+    //Usamos useEffect para actualizar los timbres en el selector manual
     try {
       const token = localStorage.getItem("token");
       const fetchDoorbells = async () => {
@@ -56,16 +43,57 @@ const BuildingUpdater = () => {
   useEffect(() => {
     console.log(doorbells);
   }, [doorbells]);
+
+  const handleSubmitAnswer = async (doorbellIdResponse, isAnsweredResponse) => {
+    //Manejamos la respuesta de los botones en cada timbre
+    try {
+      const token = localStorage.getItem("token");
+      const decode = jwtDecode(token); //Hago un decode del token para usar los parametros
+      const res = await axios.post(
+        "http://localhost:3001/api/callLog/createCallLog",
+        {
+          isAnswered: isAnsweredResponse,
+          registeredAt: Date.now(),
+          userId: decode.id, //El id del usuario dentro del token
+          doorbellId: doorbellIdResponse,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const updated = await axios.get(
+        "http://localhost:3001/api/doorbell/getAllDoorbellWithLastLog",
+        {
+          params: { buildingId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setDoorbells(updated.data);
+    } catch {
+      console.log("Error en el submit");
+    }
+  };
+
   return (
     <ContenedorGeneral>
       <MainCard autoHeight>
         <BackArrow />
         <Title text={buildingName || "Edificio"} className="my-30" />
-        <Section className="mx-10 mt-10 mb-20 ">
-          <Title text="ACTUALIZACIÓN DE DATOS" />
+        <Section border className="mx-10 mt-10 mb-20">
+          <SelectorAutomatico
+            doorbell={doorbells}
+            handleSubmit={handleSubmitAnswer}
+          />
         </Section>
         <Section border className="m-3">
-          <SelectorManual doorbells={doorbells} />
+          <SelectorManual
+            doorbells={doorbells}
+            handleSubmit={handleSubmitAnswer}
+          />
         </Section>
       </MainCard>
     </ContenedorGeneral>

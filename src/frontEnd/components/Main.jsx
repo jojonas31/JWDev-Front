@@ -62,7 +62,7 @@ const Main = () => {
             {errors.userPassword && (
               <p className="text-red-500">{errors.userPassword.message}</p>
             )}
-            <Button type="submit">Enviar</Button>
+            <Button type="submit" text="ENVIAR"></Button>
           </Form>
         </Section>
       </MainCard>
