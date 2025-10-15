@@ -1,4 +1,5 @@
 import Button from "./Button";
+import { DataFormatter } from "../utils/dataFormatter";
 
 const SelectorManual = ({ doorbells, handleSubmit }) => {
   return (
@@ -26,7 +27,7 @@ const SelectorManual = ({ doorbells, handleSubmit }) => {
             {doorbell.isAnswered === true ? "Si" : "No"}
           </div>
           <div className="col-span-2 text-jw-primary m-auto">
-            {doorbell.registeredAt}
+            {DataFormatter(doorbell.registeredAt)}
           </div>
           <Button
             text="SI"

@@ -16,13 +16,11 @@ const BuildingUpdater = () => {
   const buildingId = location.state?.buildingId;
   const [doorbells, setDoorbells] = useState([]);
 
-  const datoFake = { number: "1A", isAnswered: true, registeredAt: "31/05/03" };
-
   useEffect(() => {
     //Usamos useEffect para actualizar los timbres en el selector manual
-    try {
-      const token = localStorage.getItem("token");
-      const fetchDoorbells = async () => {
+    const fetchDoorbells = async () => {
+      try {
+        const token = localStorage.getItem("token");
         const res = await axios.get(
           "http://localhost:3001/api/doorbell/getAllDoorbellWithLastLog",
           {
@@ -33,12 +31,13 @@ const BuildingUpdater = () => {
           }
         );
         setDoorbells(res.data);
-      };
-      fetchDoorbells();
-    } catch (err) {
-      console.log("Error:", err.message);
-    }
-  }, []);
+      } catch (err) {
+        console.error("Error en getAllDoorbellWithLastLog:", err);
+        console.log("Error:", err.message);
+      }
+    };
+    if (buildingId) fetchDoorbells();
+  }, [buildingId]);
 
   useEffect(() => {
     console.log(doorbells);

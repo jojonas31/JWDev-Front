@@ -8,7 +8,7 @@ import Input from "./Input";
 import Button from "./Button";
 import ContenedorGeneral from "./ContenedorGeneral";
 import { useState, useEffect } from "react";
-import supabase from "../../../utils/supabase";
+
 import axios from "axios";
 
 const Main = () => {

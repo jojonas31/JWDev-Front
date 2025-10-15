@@ -1,8 +1,9 @@
 import Button from "./Button";
+import { DataFormatter } from "../utils/dataFormatter";
 
 const SelectorAutomatico = ({ doorbell, handleSubmit }) => {
   const selectLastDoorbell = () => {
-    if (!doorbell) return undefined;
+    console.log(doorbell);
     var lastDoorbell = doorbell[0];
     doorbell.forEach((item) => {
       if (lastDoorbell.registeredAt > item.registeredAt) {
@@ -34,7 +35,7 @@ const SelectorAutomatico = ({ doorbell, handleSubmit }) => {
         className={`grid grid-cols-2 gap-5 border-jw-primary overflow-y-auto p-1`}
       >
         <div className={`text-xl text-jw-primary m-auto`}>
-          Ult Vis: {autoDoorbell.registeredAt}
+          Ult Vis: {DataFormatter(autoDoorbell.registeredAt)}
         </div>
         <div className={`text-xl text-jw-primary m-auto`}>
           Atendio: {autoDoorbell.isAnswered === true ? "SI" : "NO"}
