@@ -12,6 +12,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const BuildingSelector = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [buildings, setBuildings] = useState([]);
   const [error, setError] = useState("");
@@ -22,7 +23,7 @@ const BuildingSelector = () => {
         const token = localStorage.getItem("token"); //Obtine el token
 
         const res = await axios.get(
-          "http://localhost:3001/api/building/getBuildings", //Hace un request para obtener la lista de edificios de la DB
+          `${API_URL}/api/building/getBuildings`, //Hace un request para obtener la lista de edificios de la DB
           {
             headers: {
               Authorization: `Bearer ${token}`,

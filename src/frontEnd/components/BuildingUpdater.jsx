@@ -11,6 +11,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 const BuildingUpdater = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const location = useLocation();
   const buildingName = location.state?.buildingName;
   const buildingId = location.state?.buildingId;
@@ -22,7 +23,7 @@ const BuildingUpdater = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "http://localhost:3001/api/doorbell/getAllDoorbellWithLastLog",
+          `${API_URL}/api/doorbell/getAllDoorbellWithLastLog`,
           {
             params: { buildingId: buildingId },
             headers: {
@@ -49,7 +50,7 @@ const BuildingUpdater = () => {
       const token = localStorage.getItem("token");
       const decode = jwtDecode(token); //Hago un decode del token para usar los parametros
       const res = await axios.post(
-        "http://localhost:3001/api/callLog/createCallLog",
+        `${API_URL}/api/callLog/createCallLog`,
         {
           isAnswered: isAnsweredResponse,
           registeredAt: Date.now(),
@@ -63,7 +64,7 @@ const BuildingUpdater = () => {
         }
       );
       const updated = await axios.get(
-        "http://localhost:3001/api/doorbell/getAllDoorbellWithLastLog",
+        `${API_URL}/api/doorbell/getAllDoorbellWithLastLog`,
         {
           params: { buildingId },
           headers: {

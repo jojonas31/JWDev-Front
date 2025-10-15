@@ -1,5 +1,5 @@
 import Button from "./Button";
-import { DataFormatter } from "../utils/DataFormatter";
+import { DataFormatter } from "../utils/DataFormatter.js";
 
 const SelectorManual = ({ doorbells, handleSubmit }) => {
   return (
