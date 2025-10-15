@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const Main = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const {
     register,
@@ -22,7 +23,7 @@ const Main = () => {
   const onSubmit = async (data) => {
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/user/userValidate", //Hace una peticion para validar el usuario al enviarse el form
+        `${API_URL}/api/user/userValidate`, //Hace una peticion para validar el usuario al enviarse el form
         data
       );
       if (res.data.success) {
